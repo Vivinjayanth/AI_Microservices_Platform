@@ -146,7 +146,7 @@ ALLOWED_ORIGINS=http://localhost:8000,http://localhost:3000,http://127.0.0.1:800
     "text": "Your text to summarize...",
     "options": {
       "maxLength": 300,
-      "style": "concise",  // concise, detailed, bullet, executive
+      "style": "concise",  
       "language": "english"
     }
   }
