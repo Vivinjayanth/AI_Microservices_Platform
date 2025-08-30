@@ -1,0 +1,280 @@
+{
+  "info": {
+    "name": "AI Microservices API",
+    "description": "Collection for testing AI microservices built with Flowise and LangChain",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        },
+        "description": "Check the health status of all microservices"
+      }
+    },
+    {
+      "name": "API Overview",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api",
+          "host": ["{{baseUrl}}"],
+          "path": ["api"]
+        },
+        "description": "Get overview of all available API endpoints"
+      }
+    },
+    {
+      "name": "Text Summarization",
+      "item": [
+        {
+          "name": "Summarize Text",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"text\": \"Your long text content here that you want to summarize. This could be an article, report, or any text content that needs to be condensed into a shorter format while preserving the key information and main points.\",\n  \"options\": {\n    \"maxLength\": 300,\n    \"style\": \"concise\",\n    \"language\": \"english\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/summarize",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "summarize"]
+            },
+            "description": "Summarize a single text input with customizable options"
+          }
+        },
+        {
+          "name": "Batch Summarization",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"texts\": [\n    \"First text to summarize. This could be a news article or blog post.\",\n    \"Second text to summarize. This could be a research paper abstract.\",\n    \"Third text to summarize. This could be a product description.\"\n  ],\n  \"options\": {\n    \"maxLength\": 200,\n    \"style\": \"bullet\",\n    \"language\": \"english\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/summarize/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "summarize", "batch"]
+            },
+            "description": "Summarize multiple texts in a single request"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Document Q&A",
+      "item": [
+        {
+          "name": "Upload Document",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "document",
+                  "type": "file",
+                  "description": "Upload PDF, DOCX, TXT, or MD file"
+                },
+                {
+                  "key": "collectionName",
+                  "value": "my-documents",
+                  "type": "text",
+                  "description": "Optional collection name (defaults to 'default')"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "upload"]
+            },
+            "description": "Upload and process a document for Q&A"
+          }
+        },
+        {
+          "name": "Ask Question",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"question\": \"What are the main topics covered in this document?\",\n  \"collectionName\": \"my-documents\",\n  \"options\": {\n    \"topK\": 4,\n    \"includeMetadata\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/ask",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "ask"]
+            },
+            "description": "Ask a question about uploaded documents"
+          }
+        },
+        {
+          "name": "Search Documents",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/search?query=machine learning&collectionName=my-documents&limit=5",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "search"],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "machine learning",
+                  "description": "Search query"
+                },
+                {
+                  "key": "collectionName",
+                  "value": "my-documents",
+                  "description": "Collection to search in (optional)"
+                },
+                {
+                  "key": "limit",
+                  "value": "5",
+                  "description": "Maximum number of results (optional)"
+                }
+              ]
+            },
+            "description": "Search through document content"
+          }
+        },
+        {
+          "name": "List Collections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/collections",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "collections"]
+            },
+            "description": "List all document collections"
+          }
+        },
+        {
+          "name": "Delete Collection",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/documents/collections/my-documents",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "documents", "collections", "my-documents"]
+            },
+            "description": "Delete a document collection"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Learning Path",
+      "item": [
+        {
+          "name": "Generate Learning Path",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"goal\": \"Learn full-stack web development\",\n  \"currentSkills\": [\"HTML\", \"CSS\", \"basic JavaScript\"],\n  \"experience\": \"beginner\",\n  \"timeCommitment\": \"15 hours/week\",\n  \"learningStyle\": \"hands-on\",\n  \"interests\": [\"web design\", \"user experience\", \"modern frameworks\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/learning-path/generate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "learning-path", "generate"]
+            },
+            "description": "Generate a personalized learning path based on user profile"
+          }
+        },
+        {
+          "name": "Get Popular Paths",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/learning-path/popular",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "learning-path", "popular"]
+            },
+            "description": "Get a list of popular learning paths"
+          }
+        },
+        {
+          "name": "Update Progress",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pathId\": \"path_abc123\",\n  \"milestoneId\": \"milestone_xyz789\",\n  \"completed\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/learning-path/progress",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "learning-path", "progress"]
+            },
+            "description": "Update progress on a learning milestone"
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Set base URL if not already set",
+          "if (!pm.variables.get('baseUrl')) {",
+          "    pm.variables.set('baseUrl', 'http://localhost:3000');",
+          "}"
+        ]
+      }
+    }
+  ]
+}
